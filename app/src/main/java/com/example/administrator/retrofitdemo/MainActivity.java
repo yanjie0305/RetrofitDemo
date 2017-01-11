@@ -59,9 +59,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void getQQData(View view) {
-        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://japi.juhe.cn/").addConverterFactory(ScalarsConverterFactory.create()).build();
+        Retrofit retrofit=new Retrofit.Builder().baseUrl("http://japi.juhe.cn/").addConverterFactory(GsonConverterFactory.create()).build();
         RequestAPI requestAPI = retrofit.create(RequestAPI.class);
+
         Call<QQData> qqData = requestAPI.getQQData("96efc220a4196fafdfade0c9d1e897ac", "295424589");
+
         qqData.enqueue(new Callback<QQData>() {
             @Override
             public void onResponse(Call<QQData> call, Response<QQData> response) {
@@ -73,21 +75,65 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<QQData> call, Throwable t) {
                 Toast.makeText(MainActivity.this, "--"+t.getMessage(), Toast.LENGTH_SHORT).show();
-
             }
         });
 
     }
 
     public void postQQData(View view) {
+         Retrofit retrofit=new Retrofit.Builder().baseUrl("http://japi.juhe.cn/").addConverterFactory(GsonConverterFactory.create()).build();
+        RequestAPI requestAPI = retrofit.create(RequestAPI.class);
 
+        Map<String, String> map=new HashMap<>();
+        map.put("key","96efc220a4196fafdfade0c9d1e897ac");
+        map.put("qq","111111111");
+        Call<QQData> qqDataCall = requestAPI.postQQDataMap(map);
+        qqDataCall.enqueue(new Callback<QQData>() {
+            @Override
+            public void onResponse(Call<QQData> call, Response<QQData> response) {
+                QQData data = response.body();
+                String conclusion = data.getResult().getData().getConclusion();
+                Toast.makeText(MainActivity.this, "--"+conclusion, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<QQData> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "--"+t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    
     }
 
     public void getQQData2(View view) {
+         HttpManger.getMethod("http://japi.juhe.cn/", "http://japi.juhe.cn/qqevaluate/qq?key=96efc220a4196fafdfade0c9d1e897ac&qq=295424589", new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                Toast.makeText(MainActivity.this, "--"+response.body(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "--"+t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 
     public void postQQData2(View view) {
+         Map<String, String> map=new HashMap<>();
+        map.put("key","96efc220a4196fafdfade0c9d1e897ac");
+        map.put("qq","111111111");
+        HttpManger.postMethod("http://japi.juhe.cn/","qqevaluate/qq",map,new Callback<String>(){
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                Toast.makeText(MainActivity.this, "--"+response.body(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "--"+t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 }
