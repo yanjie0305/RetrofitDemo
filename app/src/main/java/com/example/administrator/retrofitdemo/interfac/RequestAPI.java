@@ -19,4 +19,15 @@ public interface RequestAPI {
     Call<String> baiduZhiDao(@Path("v") String v);
     @GET("qqevaluate/qq")
     Call<QQData> getQQData(@Query("key") String key,@Query("qq") String qq);
+    
+      @GET("qqevaluate/qq")
+    Call<QQData> getQQDataMap(@QueryMap Map<String,String> map);
+
+    @POST("qqevaluate/qq")
+    Call<QQData>  postQQData(@Field("key") String key, @Field("qq") String qq);
+
+    //必须指定
+    @FormUrlEncoded
+    @POST("qqevaluate/qq")
+    Call<QQData> postQQDataMap(@FieldMap Map<String,String> map);
 }
